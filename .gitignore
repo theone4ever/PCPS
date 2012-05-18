@@ -1,8 +1,14 @@
+
 Thumbs.db
 *.obj
 *.exe
 *.pdb
 *.user
+# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
+bin
+obj
+
+# mstest test results
 *.aps
 *.pch
 *.vspscc
@@ -25,3 +31,4 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+TestResults
