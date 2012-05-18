@@ -8,6 +8,7 @@ namespace Vaaan.PictureCode.PositionScan.Lib.BarCode
     /// <summary>
     /// 条形码扫描分析类
     /// </summary>
+    /// fsdf
     public class BarCodePositionAnalyser
     {
         #region 公有访问器
