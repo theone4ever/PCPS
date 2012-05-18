@@ -72,7 +72,6 @@ namespace Vaaan.PictureCode.PositionScan.Lib.BarCode
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        /// hello
         public void Scan(Bitmap bitmap, BarCodePositionStandardConfig barCodePositionStandardConfig)
         {
             this.barCodePositionStandardConfig = barCodePositionStandardConfig;
