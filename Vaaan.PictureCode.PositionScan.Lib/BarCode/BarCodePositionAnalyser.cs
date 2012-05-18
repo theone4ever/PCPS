@@ -8,7 +8,6 @@ namespace Vaaan.PictureCode.PositionScan.Lib.BarCode
     /// <summary>
     /// 条形码扫描分析类
     /// </summary>
-    /// fsdf
     public class BarCodePositionAnalyser
     {
         #region 公有访问器
@@ -73,7 +72,6 @@ namespace Vaaan.PictureCode.PositionScan.Lib.BarCode
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        /// fds
         public void Scan(Bitmap bitmap, BarCodePositionStandardConfig barCodePositionStandardConfig)
         {
             this.barCodePositionStandardConfig = barCodePositionStandardConfig;
