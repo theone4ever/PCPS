@@ -8,6 +8,7 @@ namespace Vaaan.PictureCode.PositionScan.Lib
     /// <summary>
     /// 工具方法类
     /// </summary>
+    /// //
     public class Utility
     {
         /// <summary>
