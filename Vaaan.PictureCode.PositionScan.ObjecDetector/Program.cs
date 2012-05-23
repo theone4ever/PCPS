@@ -8,42 +8,55 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 {
    class Program
    {
-      static void Main(string[] args)
-      {
-         if (!IsPlaformCompatable()) return;
+
+     
+           /// <summary>
+           /// 应用程序的主入口点。
+           /// </summary>
+           [STAThread]
+           static void Main()
+           {
+               Application.EnableVisualStyles();
+               Application.SetCompatibleTextRenderingDefault(false);
+               Application.Run(new MainForm());
+           
+       }
+      //static void Main(string[] args)
+      //{
+      //   if (!IsPlaformCompatable()) return;
 
          
-         var ObjectList = new List<Image<Gray, byte>>();
-         var ObjectBoundList = new List<Rectangle>();
+      //   var ObjectList = new List<Image<Gray, byte>>();
+      //   var ObjectBoundList = new List<Rectangle>();
       
-         var arrowSignDetector = new ArrowSignDetector();
+      //   var arrowSignDetector = new ArrowSignDetector();
 
-         var image = new Image<Bgr, byte>("C:/1-2.jpg");
-         arrowSignDetector.DetectObject(image, ObjectList, ObjectBoundList);
+      //   var image = new Image<Bgr, byte>("C:/1-2.jpg");
+      //    Image<Gray, Byte> grayImg = null;
+      //    arrowSignDetector.DetectObject(image, ObjectList, ObjectBoundList, grayImg);
           
          
 
-         for (int i = 0; i < ObjectList.Count; i++)
-         {
-             Rectangle rect = ObjectBoundList[i];
-             image.Draw(rect, new Bgr(Color.Aquamarine), 2);
-         }
+      //   for (int i = 0; i < ObjectList.Count; i++)
+      //   {
+      //       Rectangle rect = ObjectBoundList[i];
+      //       image.Draw(rect, new Bgr(Color.Aquamarine), 2);
+      //   }
           
-         String win1 = "Test Window" ; //The name of the window
-         CvInvoke.cvShowImage(win1, image); //Show the image
-         CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
-         CvInvoke.cvDestroyWindow(win1); //Destory the window
+      //   String win1 = "Test Window" ; //The name of the window
+      //   CvInvoke.cvShowImage(win1, image); //Show the image
+      //   CvInvoke.cvWaitKey(0);  //Wait for the key pressing event
+      //   CvInvoke.cvDestroyWindow(win1); //Destory the window
          
 
        
-      }
+      //}
 
       /// <summary>
       /// Check if both the managed and unmanaged code are compiled for the same architecture

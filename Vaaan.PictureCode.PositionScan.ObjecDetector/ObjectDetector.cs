@@ -100,16 +100,17 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
      
 
-      public void DetectObject(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList)
+      public void DetectObject(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList, Image<Gray, Byte> grayImage)
       {
        
           Image<Bgr, Byte> whiteBlackImg = GetWhiteBlackImage(img);
          
           Image<Gray, Byte> grayImg = whiteBlackImg.Convert<Gray, Byte>();
-    
-          using (var canny = grayImg.Canny(new Gray(100), new Gray(50)))
-          {
 
+          var canny = grayImg.Canny(new Gray(100), new Gray(50));
+          grayImage = canny.Clone();
+          
+                   
               using (var stor = new MemStorage())
               {
                   Contour<Point> contours = canny.FindContours(
@@ -119,7 +120,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
                 
                   FindObject(img, stopSignList, boxList, contours);
               }
-          }   
+             
       }
 
       
