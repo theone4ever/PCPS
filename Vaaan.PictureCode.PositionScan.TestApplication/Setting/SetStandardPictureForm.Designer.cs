@@ -43,10 +43,10 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.pbArea = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cbCharAt = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.nudMaxInclineDegree = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cbCharAt = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -64,7 +64,7 @@
             this.设置ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(752, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(752, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -74,20 +74,20 @@
             this.保存ToolStripMenuItem,
             this.取消ToolStripMenuItem});
             this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
-            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.操作ToolStripMenuItem.Text = "操作";
             // 
             // 保存ToolStripMenuItem
             // 
             this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.保存ToolStripMenuItem.Text = "保存";
             this.保存ToolStripMenuItem.Click += new System.EventHandler(this.保存ToolStripMenuItem_Click);
             // 
             // 取消ToolStripMenuItem
             // 
             this.取消ToolStripMenuItem.Name = "取消ToolStripMenuItem";
-            this.取消ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.取消ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.取消ToolStripMenuItem.Text = "取消";
             this.取消ToolStripMenuItem.Click += new System.EventHandler(this.取消ToolStripMenuItem_Click);
             // 
@@ -97,20 +97,20 @@
             this.选择标准图ToolStripMenuItem,
             this.框选条码范围ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.设置ToolStripMenuItem.Text = "设置";
             // 
             // 选择标准图ToolStripMenuItem
             // 
             this.选择标准图ToolStripMenuItem.Name = "选择标准图ToolStripMenuItem";
-            this.选择标准图ToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.选择标准图ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.选择标准图ToolStripMenuItem.Text = "选择标准图...";
             this.选择标准图ToolStripMenuItem.Click += new System.EventHandler(this.选择标准图ToolStripMenuItem_Click);
             // 
             // 框选条码范围ToolStripMenuItem
             // 
             this.框选条码范围ToolStripMenuItem.Name = "框选条码范围ToolStripMenuItem";
-            this.框选条码范围ToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.框选条码范围ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.框选条码范围ToolStripMenuItem.Text = "框选条码范围...";
             this.框选条码范围ToolStripMenuItem.Click += new System.EventHandler(this.框选条码范围ToolStripMenuItem_Click);
             // 
@@ -127,14 +127,14 @@
             // tsslInfo
             // 
             this.tsslInfo.Name = "tsslInfo";
-            this.tsslInfo.Size = new System.Drawing.Size(13, 17);
+            this.tsslInfo.Size = new System.Drawing.Size(16, 17);
             this.tsslInfo.Text = "  ";
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.pbStandard);
             this.groupBox1.Location = new System.Drawing.Point(0, 27);
             this.groupBox1.Name = "groupBox1";
@@ -152,6 +152,7 @@
             this.pbStandard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbStandard.TabIndex = 0;
             this.pbStandard.TabStop = false;
+            this.pbStandard.Click += new System.EventHandler(this.pbStandard_Click);
             this.pbStandard.Paint += new System.Windows.Forms.PaintEventHandler(this.pbStandard_Paint);
             this.pbStandard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbStandard_MouseDown);
             this.pbStandard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbStandard_MouseMove);
@@ -197,6 +198,26 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "参数设置";
             // 
+            // cbCharAt
+            // 
+            this.cbCharAt.FormattingEnabled = true;
+            this.cbCharAt.Items.AddRange(new object[] {
+            "左侧",
+            "右侧"});
+            this.cbCharAt.Location = new System.Drawing.Point(115, 48);
+            this.cbCharAt.Name = "cbCharAt";
+            this.cbCharAt.Size = new System.Drawing.Size(59, 20);
+            this.cbCharAt.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(32, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 12);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "条形码数字在";
+            // 
             // nudMaxInclineDegree
             // 
             this.nudMaxInclineDegree.Location = new System.Drawing.Point(115, 20);
@@ -222,26 +243,6 @@
             this.label1.Size = new System.Drawing.Size(101, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "条形码最大倾斜角";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 52);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "条形码数字在";
-            // 
-            // cbCharAt
-            // 
-            this.cbCharAt.FormattingEnabled = true;
-            this.cbCharAt.Items.AddRange(new object[] {
-            "左侧",
-            "右侧"});
-            this.cbCharAt.Location = new System.Drawing.Point(115, 48);
-            this.cbCharAt.Name = "cbCharAt";
-            this.cbCharAt.Size = new System.Drawing.Size(59, 20);
-            this.cbCharAt.TabIndex = 3;
             // 
             // SetStandardPictureForm
             // 

@@ -279,5 +279,10 @@ namespace Vaaan.PictureCode.PositionScan.TestApplication.Setting
             this.Visible = false;
             e.Cancel = true;
         }
+
+        private void pbStandard_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

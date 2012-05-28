@@ -36,6 +36,8 @@
             this.识别ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.黑白图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.条形码ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.标准图设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslFileName = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
@@ -55,8 +57,6 @@
             this.lblScanResult = new System.Windows.Forms.Label();
             this.nudBlackThreshold = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.标准图设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -78,7 +78,7 @@
             this.设置ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(860, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(860, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -88,20 +88,20 @@
             this.载入图片ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
-            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.操作ToolStripMenuItem.Text = "文件";
             // 
             // 载入图片ToolStripMenuItem
             // 
             this.载入图片ToolStripMenuItem.Name = "载入图片ToolStripMenuItem";
-            this.载入图片ToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.载入图片ToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.载入图片ToolStripMenuItem.Text = "载入图片...";
             this.载入图片ToolStripMenuItem.Click += new System.EventHandler(this.载入图片ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -111,22 +111,37 @@
             this.黑白图ToolStripMenuItem,
             this.条形码ToolStripMenuItem});
             this.识别ToolStripMenuItem.Name = "识别ToolStripMenuItem";
-            this.识别ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.识别ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.识别ToolStripMenuItem.Text = "识别";
             // 
             // 黑白图ToolStripMenuItem
             // 
             this.黑白图ToolStripMenuItem.Name = "黑白图ToolStripMenuItem";
-            this.黑白图ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.黑白图ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.黑白图ToolStripMenuItem.Text = "黑白图";
             this.黑白图ToolStripMenuItem.Click += new System.EventHandler(this.黑白图ToolStripMenuItem_Click);
             // 
             // 条形码ToolStripMenuItem
             // 
             this.条形码ToolStripMenuItem.Name = "条形码ToolStripMenuItem";
-            this.条形码ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.条形码ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.条形码ToolStripMenuItem.Text = "矩形区";
             this.条形码ToolStripMenuItem.Click += new System.EventHandler(this.条形码ToolStripMenuItem_Click);
+            // 
+            // 设置ToolStripMenuItem
+            // 
+            this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.标准图设置ToolStripMenuItem});
+            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.设置ToolStripMenuItem.Text = "设置";
+            // 
+            // 标准图设置ToolStripMenuItem
+            // 
+            this.标准图设置ToolStripMenuItem.Name = "标准图设置ToolStripMenuItem";
+            this.标准图设置ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.标准图设置ToolStripMenuItem.Text = "标准图设置...";
+            this.标准图设置ToolStripMenuItem.Click += new System.EventHandler(this.标准图设置ToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -142,13 +157,13 @@
             // tsslFileName
             // 
             this.tsslFileName.Name = "tsslFileName";
-            this.tsslFileName.Size = new System.Drawing.Size(13, 17);
+            this.tsslFileName.Size = new System.Drawing.Size(16, 17);
             this.tsslFileName.Text = "  ";
             // 
             // tsslInfo
             // 
             this.tsslInfo.Name = "tsslInfo";
-            this.tsslInfo.Size = new System.Drawing.Size(13, 17);
+            this.tsslInfo.Size = new System.Drawing.Size(16, 17);
             this.tsslInfo.Text = "  ";
             // 
             // groupBox1
@@ -198,13 +213,13 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.图片另存为ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 26);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // 图片另存为ToolStripMenuItem
             // 
             this.图片另存为ToolStripMenuItem.Name = "图片另存为ToolStripMenuItem";
-            this.图片另存为ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.图片另存为ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.图片另存为ToolStripMenuItem.Text = "图片另存为...";
             this.图片另存为ToolStripMenuItem.Click += new System.EventHandler(this.图片另存为ToolStripMenuItem_Click);
             // 
@@ -304,6 +319,7 @@
             0,
             0,
             0});
+            this.nudBlackThreshold.ValueChanged += new System.EventHandler(this.nudBlackThreshold_ValueChanged);
             // 
             // label1
             // 
@@ -313,21 +329,6 @@
             this.label1.Size = new System.Drawing.Size(113, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "识别黑白图灰度阀值";
-            // 
-            // 设置ToolStripMenuItem
-            // 
-            this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.标准图设置ToolStripMenuItem});
-            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.设置ToolStripMenuItem.Text = "设置";
-            // 
-            // 标准图设置ToolStripMenuItem
-            // 
-            this.标准图设置ToolStripMenuItem.Name = "标准图设置ToolStripMenuItem";
-            this.标准图设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.标准图设置ToolStripMenuItem.Text = "标准图设置...";
-            this.标准图设置ToolStripMenuItem.Click += new System.EventHandler(this.标准图设置ToolStripMenuItem_Click);
             // 
             // MainForm
             // 

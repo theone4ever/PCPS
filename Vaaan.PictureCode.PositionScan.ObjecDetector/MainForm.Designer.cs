@@ -54,6 +54,7 @@
             this.lblScanResult = new System.Windows.Forms.Label();
             this.nudBlackThreshold = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -104,7 +105,8 @@
             // 识别ToolStripMenuItem
             // 
             this.识别ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DetectToolStripMenuItem});
+            this.DetectToolStripMenuItem,
+            this.settingToolStripMenuItem});
             this.识别ToolStripMenuItem.Name = "识别ToolStripMenuItem";
             this.识别ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.识别ToolStripMenuItem.Text = "识别";
@@ -292,6 +294,7 @@
             0,
             0,
             0});
+            this.nudBlackThreshold.ValueChanged += new System.EventHandler(this.nudBlackThreshold_ValueChanged);
             // 
             // label1
             // 
@@ -301,6 +304,13 @@
             this.label1.Size = new System.Drawing.Size(113, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "识别黑白图灰度阀值";
+            // 
+            // settingToolStripMenuItem
+            // 
+            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingToolStripMenuItem.Text = "Setting";
+            this.settingToolStripMenuItem.Click += new System.EventHandler(this.settingToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -360,11 +370,12 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.NumericUpDown nudBlackThreshold;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblScanResult;
         private System.Windows.Forms.ToolStripMenuItem DetectToolStripMenuItem;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ToolStripStatusLabel tsslFileName;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblScanResult;
+        private System.Windows.Forms.ToolStripMenuItem settingToolStripMenuItem;
     }
 }
 

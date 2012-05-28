@@ -163,5 +163,10 @@ namespace Vaaan.PictureCode.PositionScan.TestApplication
         }
 
         #endregion
+
+        private void nudBlackThreshold_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
