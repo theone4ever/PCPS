@@ -37,12 +37,12 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
         #endregion
 
-       
 
-    
+
+        private SetTargetObjectForm _setStandardPictureForm = new SetTargetObjectForm();
 
         #region 图片另存为功能
-        PictureBox currentPb;
+        PictureBox currentPb; 
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
@@ -111,7 +111,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
             Image<Bgr, byte> image = new Image<Bgr, byte>(openFileDialog1.FileName);
             Image<Gray, byte> grayImage = null;
-            Bitmap grayImg = arrowSignDetector.DetectObject(image, ObjectList, ObjectBoundList, grayImage);
+            Bitmap grayImg = arrowSignDetector.DetectObject(image, ObjectList, ObjectBoundList, grayImage, _setStandardPictureForm.target);
 
 
 
@@ -133,10 +133,10 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         }
 
         
-        SetTargetObjectForm setStandardPictureForm = new SetTargetObjectForm();
+        
         private void settingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            setStandardPictureForm.Show();
+            _setStandardPictureForm.Show();
         }
     }
 }

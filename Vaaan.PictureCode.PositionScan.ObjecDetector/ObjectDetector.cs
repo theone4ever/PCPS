@@ -16,9 +16,9 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
     {
         private readonly ushort _blackThreshold;
 
-        private readonly Contour<Point> _defaultContour;
-        private readonly Contour<Point> _octagon;
-        private readonly MemStorage _octagonStorage;
+        //private Contour<Point> _defaultContour;
+        
+        
         private readonly MemStorage _stor;
         public Bitmap _grayImg;
         public Bitmap _canndyImg;
@@ -26,31 +26,15 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         public ArrowSignDetector(ushort blackThreshold)
         {
             _blackThreshold = blackThreshold;
-            _octagonStorage = new MemStorage();
+            
             _stor = new MemStorage();
-
-            _octagon = new Contour<Point>(_octagonStorage);
-            _octagon.PushMulti(new[]
-                                   {
-                                       new Point(0, 3),
-                                       new Point(3, 0),
-                                       new Point(3, 2),
-                                       new Point(8, 2),
-                                       new Point(8, 4),
-                                       new Point(3, 4),
-                                       new Point(3, 6)
-                                   },
-                               BACK_OR_FRONT.FRONT);
-         //   _defaultContour = FindDefault();
+         
         }
 
 
 
         public Contour<Point> FindExernalDefault (Image<Bgr, byte> defaultImage, int left, int right, int top, int buttom)
         {
-           
-            
-           
             double areaSize = (buttom - top)*(right - left)*0.2;
             Image<Bgr, byte> blackWhiteImg = GetWhiteBlackImage(defaultImage);
             Image<Gray, Byte> grayImg = blackWhiteImg.Convert<Gray, Byte>();
@@ -101,13 +85,9 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             for (; contours != null; contours = contours.HNext)
             {
                 //contours.ApproxPoly(contours.Perimeter * 0.02, 0, contours.Storage);
-                if (contours.Area > 200)
+                if (contours.Area > 2000)
                 {
-                    double ratio = CvInvoke.cvMatchShapes(_octagon, contours, CONTOURS_MATCH_TYPE.CV_CONTOURS_MATCH_I3,
-                                                          0);
-
-                    if (ratio > 0.3) continue; //not a good match of contour shape
-                    else return contours;
+                   return contours;
                 }
             }
 
@@ -116,7 +96,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
 
         private void FindObject(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList,
-                                Contour<Point> contours)
+                                Contour<Point> contours, Contour<Point> exampleContour)
         {
             for (; contours != null; contours = contours.HNext)
             {
@@ -124,7 +104,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
               
                 if (contours.Area > 200)
                 {
-                    double ratio = CvInvoke.cvMatchShapes(_defaultContour, contours,
+                    double ratio = CvInvoke.cvMatchShapes(exampleContour, contours,
                                                           CONTOURS_MATCH_TYPE.CV_CONTOUR_MATCH_I1, 0);
 
                     if (ratio > 0.1) //not a good match of contour shape
@@ -132,7 +112,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
                         img.Draw(contours.BoundingRectangle, new Bgr(Color.Red), 2);
                         Contour<Point> child = contours.VNext;
                         if (child != null)
-                            FindObject(img, stopSignList, boxList, child);
+                            FindObject(img, stopSignList, boxList, child, exampleContour);
                         continue;
                     }
 
@@ -149,7 +129,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
 
         public Bitmap DetectObject(Image<Bgr, byte> img, List<Image<Gray, Byte>> stopSignList, List<Rectangle> boxList,
-                                   Image<Gray, Byte> grayImage)
+                                   Image<Gray, Byte> grayImage, Contour<Point> exampleContour)
         {
             Image<Bgr, Byte> whiteBlackImg = GetWhiteBlackImage(img);
             this._grayImg = whiteBlackImg.Bitmap;
@@ -165,10 +145,13 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             {
                 Contour<Point> contours = canny.FindContours(
                     CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
-                    RETR_TYPE.CV_RETR_LIST,
+                    RETR_TYPE.CV_RETR_TREE,
                     stor);
 
-                FindObject(img, stopSignList, boxList, contours);
+                if (exampleContour != null)
+                {
+                    FindObject(img, stopSignList, boxList, contours, exampleContour);
+                }
             }
             return this._grayImg;
         }
@@ -204,7 +187,6 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
         protected override void DisposeObject()
         {
-            _octagonStorage.Dispose();
             _stor.Dispose();
         }
     }

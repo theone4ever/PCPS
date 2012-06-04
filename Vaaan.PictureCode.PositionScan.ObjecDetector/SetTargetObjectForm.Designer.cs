@@ -34,7 +34,7 @@
             this.取消ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.选择标准图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.框选条码范围ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.框选图形范围ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -43,10 +43,12 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.pbArea = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cbCharAt = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.nudMaxInclineDegree = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cbCharAt = new System.Windows.Forms.ComboBox();
+            this.thresholdUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -55,6 +57,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbArea)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxInclineDegree)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -95,7 +98,7 @@
             // 
             this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.选择标准图ToolStripMenuItem,
-            this.框选条码范围ToolStripMenuItem});
+            this.框选图形范围ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.设置ToolStripMenuItem.Text = "设置";
@@ -103,16 +106,16 @@
             // 选择标准图ToolStripMenuItem
             // 
             this.选择标准图ToolStripMenuItem.Name = "选择标准图ToolStripMenuItem";
-            this.选择标准图ToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.选择标准图ToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.选择标准图ToolStripMenuItem.Text = "选择标准图...";
             this.选择标准图ToolStripMenuItem.Click += new System.EventHandler(this.选择标准图ToolStripMenuItem_Click);
             // 
-            // 框选条码范围ToolStripMenuItem
+            // 框选图形范围ToolStripMenuItem
             // 
-            this.框选条码范围ToolStripMenuItem.Name = "框选条码范围ToolStripMenuItem";
-            this.框选条码范围ToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.框选条码范围ToolStripMenuItem.Text = "框选条码范围...";
-            this.框选条码范围ToolStripMenuItem.Click += new System.EventHandler(this.框选条码范围ToolStripMenuItem_Click);
+            this.框选图形范围ToolStripMenuItem.Name = "框选图形范围ToolStripMenuItem";
+            this.框选图形范围ToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.框选图形范围ToolStripMenuItem.Text = "框选图形范围...";
+            this.框选图形范围ToolStripMenuItem.Click += new System.EventHandler(this.框选图形范围ToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -186,6 +189,8 @@
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.thresholdUpDown);
             this.groupBox3.Controls.Add(this.cbCharAt);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.nudMaxInclineDegree);
@@ -196,6 +201,26 @@
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "参数设置";
+            // 
+            // cbCharAt
+            // 
+            this.cbCharAt.FormattingEnabled = true;
+            this.cbCharAt.Items.AddRange(new object[] {
+            "左侧",
+            "右侧"});
+            this.cbCharAt.Location = new System.Drawing.Point(115, 48);
+            this.cbCharAt.Name = "cbCharAt";
+            this.cbCharAt.Size = new System.Drawing.Size(59, 20);
+            this.cbCharAt.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(32, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 12);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "条形码数字在";
             // 
             // nudMaxInclineDegree
             // 
@@ -223,25 +248,32 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "条形码最大倾斜角";
             // 
-            // label2
+            // thresholdUpDown
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 52);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "条形码数字在";
+            this.thresholdUpDown.Location = new System.Drawing.Point(115, 74);
+            this.thresholdUpDown.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.thresholdUpDown.Name = "thresholdUpDown";
+            this.thresholdUpDown.Size = new System.Drawing.Size(59, 21);
+            this.thresholdUpDown.TabIndex = 4;
+            this.thresholdUpDown.Value = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
             // 
-            // cbCharAt
+            // label3
             // 
-            this.cbCharAt.FormattingEnabled = true;
-            this.cbCharAt.Items.AddRange(new object[] {
-            "左侧",
-            "右侧"});
-            this.cbCharAt.Location = new System.Drawing.Point(115, 48);
-            this.cbCharAt.Name = "cbCharAt";
-            this.cbCharAt.Size = new System.Drawing.Size(59, 20);
-            this.cbCharAt.TabIndex = 3;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(56, 76);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "黑白阀值";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // SetTargetObjectForm
             // 
@@ -270,6 +302,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxInclineDegree)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -280,7 +313,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 选择标准图ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 框选条码范围ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 框选图形范围ToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tsslInfo;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -296,5 +329,7 @@
         private System.Windows.Forms.PictureBox pbArea;
         private System.Windows.Forms.ComboBox cbCharAt;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown thresholdUpDown;
     }
 }

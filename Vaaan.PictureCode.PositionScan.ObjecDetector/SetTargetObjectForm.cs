@@ -22,20 +22,15 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
                 File.Delete(GetEditConfigPictureFilePath());
                 File.Copy(GetConfigPictureFilePath(), GetEditConfigPictureFilePath());
                 currentStandardPictureFilePath = GetEditConfigPictureFilePath();
-
-
                 Image image = Bitmap.FromFile(currentStandardPictureFilePath);
                 bitmap = new Bitmap(image);
                 pbStandard.Image = bitmap;
                 
-                //AnalyseProductBagEdge(image);
-                
-               // AnalyseBarCodeTip();
             }
         }
 
         // 绘制包装袋边缘
-        private void DrawProductBagEdge(Bitmap bitmap, Point[] cornerPoints)
+       /* private void DrawProductBagEdge(Bitmap bitmap, Point[] cornerPoints)
         {
             xRate = (double)bitmap.Width / pbStandard.Width;
             yRate = (double)bitmap.Height / pbStandard.Height;
@@ -44,60 +39,40 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             //g.DrawPolygon(new Pen(Color.Red, (int)lineWidth), cornerPoints);
             pbStandard.Image = Image.FromHbitmap(bitmap.GetHbitmap());
            // tsslInfo.Text = String.Format("条形码四角坐标:{0},{1},{2},{3}", cornerPoints[0], cornerPoints[1], cornerPoints[2], cornerPoints[3]);
-        }
+        }*/
 
 
         Bitmap bitmap;
-        Point[] productBagCornerPoints;
-        Point[][] allScannedBarCodeTipRectangles;
+      //  Point[] productBagCornerPoints;
+      //  Point[][] allScannedBarCodeTipRectangles;
         Point selectBarCodeRangeStartPoint = Point.Empty;
         Point selectBarCodeRangeEndPoint = Point.Empty;
         int brushWidth = 2;
         double xRate;
         double yRate;
         string currentStandardPictureFilePath;
-        public Contour<Point> target = null; 
+        public Contour<Point> target = null;
+        bool isSelectingCbRange = false;
+        List<Point> drawBarCodeTipCornerList = new List<Point>();
 
         #region 设置保存载入功能
 
         private void 保存ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 校验
-            if (productBagCornerPoints == null)
-            {
-                MessageBox.Show("未加载可以识别边框的产品图片");
-                return;
-            }
+        
             if (selectBarCodeRangeStartPoint == Point.Empty || selectBarCodeRangeEndPoint == Point.Empty)
             {
-                MessageBox.Show("未框选并确定条形码范围");
+                MessageBox.Show("未框选并确定目标图形范围");
                 return;
             }
-            if (allScannedBarCodeTipRectangles == null || allScannedBarCodeTipRectangles.Length == 0)
-            {
-                MessageBox.Show("条形码框选范围中未识别到条形码");
-                return;
-            }
+        
             // 计算条形码
             int minX = Math.Min(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
             int maxX = Math.Max(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
             int minY = Math.Min(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
             int maxY = Math.Max(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
-            Point leftTopCornerPoint = new Point(minX, minY);
-            Point rightBottomCornerPoint = new Point(maxX, maxY);
-            Point leftTopCornerPicturePoint = new Point((int)(minX * xRate), (int)(minY * yRate));
-            Point rightBottomCornerPicturePoint = new Point((int)(maxX * xRate), (int)(maxY * yRate));
             // 计算框选范围
-            int halfBarCodeTipWidth = Math.Max(allScannedBarCodeTipRectangles[0][3].X - allScannedBarCodeTipRectangles[0][0].X,
-                 allScannedBarCodeTipRectangles[0][2].X - allScannedBarCodeTipRectangles[0][1].X) / 2;
-            int halfBarCodeTipHeight = Math.Max(allScannedBarCodeTipRectangles[0][1].Y - allScannedBarCodeTipRectangles[0][0].Y,
-                 allScannedBarCodeTipRectangles[0][2].Y - allScannedBarCodeTipRectangles[0][3].Y) / 2;
-            minX = Math.Min(productBagCornerPoints[0].X, productBagCornerPoints[1].X);
-            maxX = Math.Max(productBagCornerPoints[2].X, productBagCornerPoints[3].X);
-            minY = Math.Min(productBagCornerPoints[0].Y, productBagCornerPoints[3].Y);
-            maxY = Math.Max(productBagCornerPoints[1].Y, productBagCornerPoints[2].Y);
-            int productBagWidth = maxX - minX;
-            int productBagHeight = maxY - minY;
+            
             // 序列化并保持文件
             
             
@@ -144,17 +119,10 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
         }
 
-       
-
-      
-
-        bool isSelectingCbRange = false;
-
-        private void 框选条码范围ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 框选图形范围ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("此操作将清空之前框选的条码范围\n是否继续操作", "确认操作", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
-                return;
-            tsslInfo.Text = "正在框选条形码范围，使用鼠标左键框选标准图区域以确定条码允许出现范围...";
+
+            tsslInfo.Text = "正在框选目标图形范围，使用鼠标左键框选标准图区域以确定允许出现范围...";
             isSelectingCbRange = true;
             selectBarCodeRangeStartPoint = Point.Empty;
             selectBarCodeRangeEndPoint = Point.Empty;
@@ -215,7 +183,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             double xR = (double)bitmap.Width / (double)pbStandard.Width;
             double yR = (double)bitmap.Height / (double)pbStandard.Height;
                           
-            var detector = new ArrowSignDetector(250);
+            var detector = new ArrowSignDetector(ushort.Parse(thresholdUpDown.Value.ToString()));
              target = detector.FindExernalDefault(img, 
                 (int) (left*xR), 
                 (int) (right*xR), 
@@ -223,22 +191,17 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
                 (int) (buttom*yR));
 
 
-            if (allScannedBarCodeTipRectangles == null || allScannedBarCodeTipRectangles.Length == 0
-                || allScannedBarCodeTipRectangles.Length > 1)
-                tsslInfo.Text = "未识别出条形码";
+             if (target == null )
+                tsslInfo.Text = "未识别出目标图形";
             else
             {
-                tsslInfo.Text = "已识别出条形码";
+                tsslInfo.Text = "已识别出目标图形";
                 drawBarCodeTipCornerList.Clear();
-                foreach (Point point in allScannedBarCodeTipRectangles[0])
-                {
-                    drawBarCodeTipCornerList.Add(new Point((int)(point.X / xRate), (int)(point.Y / yRate)));
-                }
             }
             pbStandard.Invalidate();
         }
 
-        List<Point> drawBarCodeTipCornerList = new List<Point>();
+      
 
         private void pbStandard_Paint(object sender, PaintEventArgs e)
         {
@@ -274,6 +237,11 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         {
             this.Visible = false;
             e.Cancel = true;
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
