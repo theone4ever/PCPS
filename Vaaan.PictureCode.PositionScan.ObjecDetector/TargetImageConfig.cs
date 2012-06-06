@@ -14,18 +14,42 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
     [XmlRoot("targetImageConfig")]
     public class TargetImageConfig
     {
-        private int[] targetAreaCorners;
+        private Point selectAreaStartPoint;
 
         /// <summary>
-        /// 获取和设置产品包装角坐标（左上，左下，右下，右上）
+        /// 选择区域起始点
         /// </summary>
-        [XmlElement("TargetAreaCorners")]
-        public int[] TargetAreaCorners
+        [XmlElement("SelectAreaStartPoint")]
+        public Point SelectAreaStartPoint
         {
-            get { return targetAreaCorners; }
-            set { targetAreaCorners = value; }
+            get { return selectAreaStartPoint; }
+            set { selectAreaStartPoint = value; }
         }
 
+        private Point selectAreaEndPoint;
+
+        /// <summary>
+        /// 选择区域结束点
+        /// </summary>
+        [XmlElement("SelectAreaEndPoint")]
+        public Point SelectAreaEndPoint
+        {
+            get { return selectAreaEndPoint; }
+            set { selectAreaEndPoint = value; }
+        }
+
+
+        private int threshold;
+
+        /// <summary>
+        /// 获取和设置黑白阈值
+        /// </summary>
+        [XmlElement("Threshold")]
+        public int Threshold
+        {
+            get { return threshold; }
+            set { threshold = value; }
+        }
     
         #region 序列化和反序列化
 

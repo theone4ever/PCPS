@@ -26,11 +26,14 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
                 Image image = Bitmap.FromFile(currentStandardPictureFilePath);
                 bitmap = new Bitmap(image);
                 pbStandard.Image = bitmap;
-                AnalyseBarCodeTip();
+                selectAreaStartPoint = currentStandardConfig.SelectAreaStartPoint;
+                selectAreaEndPoint = currentStandardConfig.SelectAreaEndPoint;
+                _threshold = currentStandardConfig.Threshold;
+                AnalyseSelectArea((ushort)_threshold);
             }
         }
 
-        private TargetImageConfig currentStandardConfig;
+        TargetImageConfig currentStandardConfig;
 
         public TargetImageConfig CurrentStandardConfig
         {
@@ -54,8 +57,8 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
       //  Point[] productBagCornerPoints;
       //  Point[][] allScannedBarCodeTipRectangles;
         private int[] areaPosition  = new int[4];
-        Point selectBarCodeRangeStartPoint = Point.Empty;
-        Point selectBarCodeRangeEndPoint = Point.Empty;
+        Point selectAreaStartPoint = Point.Empty;
+        Point selectAreaEndPoint = Point.Empty;
         int brushWidth = 2;
         double xRate;
         double yRate;
@@ -63,30 +66,34 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         public Contour<Point> target = null;
         bool isSelectingCbRange = false;
         List<Point> drawBarCodeTipCornerList = new List<Point>();
+        private int _threshold;
 
         #region 设置保存载入功能
 
         private void 保存ToolStripMenuItem_Click(object sender, EventArgs e)
         {
         
-            if (selectBarCodeRangeStartPoint == Point.Empty || selectBarCodeRangeEndPoint == Point.Empty)
+            if (selectAreaStartPoint == Point.Empty || selectAreaEndPoint == Point.Empty)
             {
                 MessageBox.Show("未框选并确定目标图形范围");
                 return;
             }
         
             // 计算条形码
-            int minX = Math.Min(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
-            int maxX = Math.Max(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
-            int minY = Math.Min(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
-            int maxY = Math.Max(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
+            int minX = Math.Min(selectAreaStartPoint.X, selectAreaEndPoint.X);
+            int maxX = Math.Max(selectAreaStartPoint.X, selectAreaEndPoint.X);
+            int minY = Math.Min(selectAreaStartPoint.Y, selectAreaEndPoint.Y);
+            int maxY = Math.Max(selectAreaStartPoint.Y, selectAreaEndPoint.Y);
             // 计算框选范围
             
             // 序列化并保持文件
             TargetImageConfig targetImageConfig = new TargetImageConfig();
-            targetImageConfig.TargetAreaCorners = areaPosition;
-            File.WriteAllText(GetConfigPictureFilePath(), TargetImageConfig.Serialize(targetImageConfig));
+            targetImageConfig.Threshold = ushort.Parse(thresholdUpDown.Value.ToString());
+            targetImageConfig.SelectAreaStartPoint = selectAreaStartPoint;
+            targetImageConfig.SelectAreaEndPoint = selectAreaEndPoint;
+            File.WriteAllText(GetConfigSaveFilePath(), TargetImageConfig.Serialize(targetImageConfig));
             this.currentStandardConfig = targetImageConfig;
+            
             
             // 保存标准图
             File.Delete(GetConfigPictureFilePath());
@@ -120,8 +127,8 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         {
             if (openFileDialog1.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
             currentStandardPictureFilePath = openFileDialog1.FileName;
-            selectBarCodeRangeStartPoint = Point.Empty;
-            selectBarCodeRangeEndPoint = Point.Empty;
+            selectAreaStartPoint = Point.Empty;
+            selectAreaEndPoint = Point.Empty;
             drawBarCodeTipCornerList.Clear();
             Image image = Bitmap.FromFile(currentStandardPictureFilePath);
             bitmap = new Bitmap(image);
@@ -136,16 +143,17 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
             tsslInfo.Text = "正在框选目标图形范围，使用鼠标左键框选标准图区域以确定允许出现范围...";
             isSelectingCbRange = true;
-            selectBarCodeRangeStartPoint = Point.Empty;
-            selectBarCodeRangeEndPoint = Point.Empty;
+            selectAreaStartPoint = Point.Empty;
+            selectAreaEndPoint = Point.Empty;
             drawBarCodeTipCornerList.Clear();
+            _threshold = ushort.Parse(thresholdUpDown.Value.ToString());
             pbStandard.Invalidate();
         }
 
         private void pbStandard_MouseDown(object sender, MouseEventArgs e)
         {
             if (!isSelectingCbRange) return;
-            selectBarCodeRangeStartPoint = e.Location;
+            selectAreaStartPoint = e.Location;
         }
 
         private void pbStandard_MouseMove(object sender, MouseEventArgs e)
@@ -165,7 +173,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             pbArea.Image = areaBitmap;
             // 框选功能
             if (!isSelectingCbRange) return;
-            selectBarCodeRangeEndPoint = e.Location;
+            selectAreaEndPoint = e.Location;
             pbStandard.Invalidate();
         }
 
@@ -174,34 +182,39 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             if (!isSelectingCbRange) return;
             tsslInfo.Text = "  ";
             isSelectingCbRange = false;
-            AnalyseBarCodeTip();
+            int threshold = 0;
+            AnalyseSelectArea((ushort)threshold);
         }
 
         // 分析条形码贴纸
-        private void AnalyseBarCodeTip()
+        private void AnalyseSelectArea(ushort threshold)
         {
 
             var img = new Image<Bgr, byte>(bitmap);
 
-            int left = Math.Min(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
-            int right = Math.Max(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
-            int top = Math.Min(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
-            int buttom = Math.Max(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
-            /*int left = selectBarCodeRangeStartPoint.X;
-            int right = selectBarCodeRangeEndPoint.X;
-            int top = selectBarCodeRangeStartPoint.Y;
-            int buttom = selectBarCodeRangeEndPoint.Y;*/
+            int left = Math.Min(selectAreaStartPoint.X, selectAreaEndPoint.X);
+            int right = Math.Max(selectAreaStartPoint.X, selectAreaEndPoint.X);
+            int top = Math.Min(selectAreaStartPoint.Y, selectAreaEndPoint.Y);
+            int buttom = Math.Max(selectAreaStartPoint.Y, selectAreaEndPoint.Y);
+            /*int left = selectAreaStartPoint.X;
+            int right = selectAreaEndPoint.X;
+            int top = selectAreaStartPoint.Y;
+            int buttom = selectAreaEndPoint.Y;*/
 
             double xR = (double)bitmap.Width / (double)pbStandard.Width;
             double yR = (double)bitmap.Height / (double)pbStandard.Height;
-                          
+             
+            if(threshold == 0)
+            {
+               _threshold = threshold = ushort.Parse(thresholdUpDown.Value.ToString());
+            }
             var detector = new ArrowSignDetector();
              target = detector.FindExernalDefault(img, 
                 (int) (left*xR), 
                 (int) (right*xR), 
                 (int) (top*yR), 
                 (int) (buttom*yR),
-            ushort.Parse(thresholdUpDown.Value.ToString()));
+           threshold);
             
             areaPosition[0] = (int) (left*xR);
             areaPosition[1] = (int) (right*xR);
@@ -222,11 +235,11 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
         private void pbStandard_Paint(object sender, PaintEventArgs e)
         {
-            if (selectBarCodeRangeStartPoint == Point.Empty || selectBarCodeRangeEndPoint == Point.Empty) return;
-            int minX = Math.Min(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
-            int maxX = Math.Max(selectBarCodeRangeStartPoint.X, selectBarCodeRangeEndPoint.X);
-            int minY = Math.Min(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
-            int maxY = Math.Max(selectBarCodeRangeStartPoint.Y, selectBarCodeRangeEndPoint.Y);
+            if (selectAreaStartPoint == Point.Empty || selectAreaEndPoint == Point.Empty) return;
+            int minX = Math.Min(selectAreaStartPoint.X, selectAreaEndPoint.X);
+            int maxX = Math.Max(selectAreaStartPoint.X, selectAreaEndPoint.X);
+            int minY = Math.Min(selectAreaStartPoint.Y, selectAreaEndPoint.Y);
+            int maxY = Math.Max(selectAreaStartPoint.Y, selectAreaEndPoint.Y);
             e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Yellow), brushWidth), minX, minY, maxX - minX, maxY - minY);
 
             if (target != null)
