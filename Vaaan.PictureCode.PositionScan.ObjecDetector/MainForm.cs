@@ -107,11 +107,11 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             var ObjectList = new List<Image<Gray, byte>>();
             var ObjectBoundList = new List<Rectangle>();
 
-            var arrowSignDetector = new ArrowSignDetector(ushort.Parse(nudBlackThreshold.Value.ToString()));
+            var arrowSignDetector = new ArrowSignDetector();
 
             Image<Bgr, byte> image = new Image<Bgr, byte>(openFileDialog1.FileName);
             Image<Gray, byte> grayImage = null;
-            Bitmap grayImg = arrowSignDetector.DetectObject(image, ObjectList, ObjectBoundList, grayImage, _setStandardPictureForm.target);
+            Bitmap grayImg = arrowSignDetector.DetectObject(image, ObjectList, ObjectBoundList, grayImage, _setStandardPictureForm.target, ushort.Parse(nudBlackThreshold.Value.ToString()));
 
 
 
@@ -123,8 +123,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
             
             pbBlackWhite.Image = image.Bitmap;
-            pbAfter.Image = arrowSignDetector._grayImg;
-            pbBefore.Image = arrowSignDetector._canndyImg;
+            pbAfter.Image = grayImg;
         }
 
         private void nudBlackThreshold_ValueChanged(object sender, EventArgs e)

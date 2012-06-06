@@ -22,11 +22,19 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
                 File.Delete(GetEditConfigPictureFilePath());
                 File.Copy(GetConfigPictureFilePath(), GetEditConfigPictureFilePath());
                 currentStandardPictureFilePath = GetEditConfigPictureFilePath();
+                currentStandardConfig = TargetImageConfig.Deserialize(File.ReadAllText(GetConfigSaveFilePath()));
                 Image image = Bitmap.FromFile(currentStandardPictureFilePath);
                 bitmap = new Bitmap(image);
                 pbStandard.Image = bitmap;
-                
+                AnalyseBarCodeTip();
             }
+        }
+
+        private TargetImageConfig currentStandardConfig;
+
+        public TargetImageConfig CurrentStandardConfig
+        {
+            get { return currentStandardConfig; }
         }
 
         // 绘制包装袋边缘
@@ -45,6 +53,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         Bitmap bitmap;
       //  Point[] productBagCornerPoints;
       //  Point[][] allScannedBarCodeTipRectangles;
+        private int[] areaPosition  = new int[4];
         Point selectBarCodeRangeStartPoint = Point.Empty;
         Point selectBarCodeRangeEndPoint = Point.Empty;
         int brushWidth = 2;
@@ -74,7 +83,10 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             // 计算框选范围
             
             // 序列化并保持文件
-            
+            TargetImageConfig targetImageConfig = new TargetImageConfig();
+            targetImageConfig.TargetAreaCorners = areaPosition;
+            File.WriteAllText(GetConfigPictureFilePath(), TargetImageConfig.Serialize(targetImageConfig));
+            this.currentStandardConfig = targetImageConfig;
             
             // 保存标准图
             File.Delete(GetConfigPictureFilePath());
@@ -85,19 +97,19 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         // 获取设置保存文件路径
         private string GetConfigSaveFilePath()
         {
-            return Path.Combine(Path.GetDirectoryName(typeof(SetTargetObjectForm).Assembly.Location), "BarCodePositionStandardConfigRecord.xml");
+            return Path.Combine(Path.GetDirectoryName(typeof(SetTargetObjectForm).Assembly.Location), "TargetImageConfigRecord.xml");
         }
 
         // 获取设置保存标准图片路径
         private string GetConfigPictureFilePath()
         {
-            return Path.Combine(Path.GetDirectoryName(typeof(SetTargetObjectForm).Assembly.Location), "BarCodePositionStandardConfigRecord.jpg");
+            return Path.Combine(Path.GetDirectoryName(typeof(SetTargetObjectForm).Assembly.Location), "TargetImageConfigRecord.jpg");
         }
 
         // 获取设置正在编辑标准图片路径
         private string GetEditConfigPictureFilePath()
         {
-            return Path.Combine(Path.GetDirectoryName(typeof(SetTargetObjectForm).Assembly.Location), "BarCodePositionStandardConfigRecordEditing.jpg");
+            return Path.Combine(Path.GetDirectoryName(typeof(SetTargetObjectForm).Assembly.Location), "TargetImageConfigRecordEditing.jpg");
         }
 
         #endregion
@@ -183,15 +195,20 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             double xR = (double)bitmap.Width / (double)pbStandard.Width;
             double yR = (double)bitmap.Height / (double)pbStandard.Height;
                           
-            var detector = new ArrowSignDetector(ushort.Parse(thresholdUpDown.Value.ToString()));
+            var detector = new ArrowSignDetector();
              target = detector.FindExernalDefault(img, 
                 (int) (left*xR), 
                 (int) (right*xR), 
                 (int) (top*yR), 
-                (int) (buttom*yR));
+                (int) (buttom*yR),
+            ushort.Parse(thresholdUpDown.Value.ToString()));
+            
+            areaPosition[0] = (int) (left*xR);
+            areaPosition[1] = (int) (right*xR);
+            areaPosition[2] =  (int) (top*yR);
+            areaPosition[3] = (int) (buttom*yR);
 
-
-             if (target == null )
+            if (target == null )
                 tsslInfo.Text = "未识别出目标图形";
             else
             {
