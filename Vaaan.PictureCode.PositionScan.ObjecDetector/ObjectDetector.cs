@@ -21,6 +21,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         
         private readonly MemStorage _stor;
         private readonly MemStorage _defaultStor;
+        private MemStorage _tempStor;
         //public Bitmap _grayImg;
         //public Bitmap _canndyImg;
 
@@ -28,6 +29,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         {
             _stor = new MemStorage();
             _defaultStor = new MemStorage();
+            _tempStor = new MemStorage();
             //   _defaultContour = FindDefault();
 
         }
@@ -142,19 +144,17 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
 
            // Image<Gray, byte> canny = grayImg.Canny(new Gray(100), new Gray(50));
 
-            using (var stor = new MemStorage())
-            {
+            
                 Contour<Point> contours = canny.FindContours(
                     CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
                     RETR_TYPE.CV_RETR_TREE,
-                    stor);
+                    _tempStor);
 
                 if (exampleContour != null)
                 {
                     FindObject(img, stopSignList, boxList, contours, exampleContour);
                 }
                 
-            }
             return whiteBlackImg.Bitmap;
         }
 
@@ -191,6 +191,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
         {
             _stor.Dispose();
             _defaultStor.Dispose();
+            _tempStor.Dispose();
         }
     }
 }

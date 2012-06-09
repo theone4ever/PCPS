@@ -145,6 +145,7 @@ namespace Vaaan.PictureCode.PositionScan.ObjectDetector
             isSelectingCbRange = true;
             selectAreaStartPoint = Point.Empty;
             selectAreaEndPoint = Point.Empty;
+            target = null;
             drawBarCodeTipCornerList.Clear();
             _threshold = ushort.Parse(thresholdUpDown.Value.ToString());
             pbStandard.Invalidate();
